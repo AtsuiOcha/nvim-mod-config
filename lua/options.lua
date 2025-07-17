@@ -7,7 +7,7 @@
 vim.o.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -70,5 +70,14 @@ vim.o.scrolloff = 10
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
 vim.o.confirm = true
+
+-- Use 2-space indentation and convert tabs to spaces for consistent formatting
+-- with smart auto-indentation on new lines
+vim.opt.tabstop = 2 -- A tab looks like 2 spaces
+vim.opt.shiftwidth = 2 -- Indentation level (for << and >>)
+vim.opt.expandtab = true -- Convert tabs to spaces
+vim.opt.smartindent = true -- Smart autoindenting
+
+vim.opt.colorcolumn = '88'
 
 -- vim: ts=2 sts=2 sw=2 et
