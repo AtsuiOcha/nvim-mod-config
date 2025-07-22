@@ -12,6 +12,14 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- Enter terminal mode
+vim.keymap.set('n', '<leader>tt', function()
+  vim.cmd 'split' -- create a horizontal split
+  vim.cmd 'resize 15' -- optional: set height to 15 lines
+  vim.cmd 'terminal' -- open terminal in the split
+  vim.cmd 'startinsert' -- go directly into insert mode
+end, { desc = 'Open terminal below' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
