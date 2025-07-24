@@ -215,6 +215,7 @@ return {
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
+        terraformls = {},
         basedpyright = {
           filetypes = { 'python' },
           cmd = { 'basedpyright-langserver', '--stdio' },
@@ -271,6 +272,7 @@ return {
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'basedpyright',
+        'terraformls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
