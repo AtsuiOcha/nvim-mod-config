@@ -30,12 +30,32 @@ return {
         end
       end,
       formatters_by_ft = {
+        python = { 'ruff_organize_imports', 'ruff_format' },
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        ruff_organize_imports = {
+          command = 'ruff',
+          args = {
+            'check',
+            '--select',
+            'I001',
+            '--fix',
+            '--stdin-filename',
+            '$FILENAME',
+            '-',
+          },
+          stdin = true,
+        },
+        ruff_format = {
+          command = 'ruff',
+          args = { 'format', '-' },
+          stdin = true,
+        },
       },
     },
   },
