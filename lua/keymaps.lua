@@ -75,4 +75,12 @@ vim.keymap.set('n', '<leader>nd', function()
   require('noice').cmd 'dismiss'
 end)
 
+vim.keymap.set('n', '<leader>fd', function()
+  vim.diagnostic.open_float(nil, {
+    focus = false,
+    scope = 'line',
+    border = 'rounded',
+    source = 'always',
+  })
+end, { desc = 'Show diagnostics in float' })
 -- vim: ts=2 sts=2 sw=2 et
