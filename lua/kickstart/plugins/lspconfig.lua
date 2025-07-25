@@ -219,6 +219,9 @@ return {
         basedpyright = {
           filetypes = { 'python' },
           cmd = { 'basedpyright-langserver', '--stdio' },
+          capabilities = vim.tbl_deep_extend('force', capabilities, {
+            offsetEncoding = { 'utf-8' },
+          }),
           settings = {
             python = {
               analysis = {
