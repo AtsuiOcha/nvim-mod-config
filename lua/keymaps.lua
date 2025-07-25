@@ -70,4 +70,9 @@ vim.keymap.set('v', '<leader>/', function()
   require('Comment.api').toggle.linewise(vim.fn.visualmode())
 end, { desc = 'Toggle comment for selection' })
 
+-- dismiss notifications
+vim.keymap.set('n', '<leader>nd', function()
+  require('noice').cmd 'dismiss'
+end)
+
 -- vim: ts=2 sts=2 sw=2 et
