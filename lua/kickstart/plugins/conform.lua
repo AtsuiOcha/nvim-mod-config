@@ -43,7 +43,7 @@ return {
           args = {
             'check',
             '--select',
-            'I001',
+            'I001,F401',
             '--fix',
             '--stdin-filename',
             '$FILENAME',
