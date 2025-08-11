@@ -81,8 +81,9 @@ vim.opt.smartindent = true -- Smart autoindenting
 vim.opt.colorcolumn = '88'
 
 vim.opt.guicursor = {
-  'n-v-c:block', -- block in normal, visual, command mode
+  'n-v-c:block-blinkwait300-blinkon200-blinkoff150', -- block in normal, visual, command mode
   'i:ver25-blinkwait300-blinkon200-blinkoff150', -- blinking vertical bar in insert mode
+  't:block-blinkwait300-blinkon200-blinkoff150', -- terminal mode
   'r-cr:hor20', -- horizontal cursor in replace and command replace
   'o:hor50', -- horizontal in operator-pending
   'a:blinkon100', -- blinking for all modes (fallback)
