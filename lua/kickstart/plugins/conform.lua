@@ -32,6 +32,7 @@ return {
       formatters_by_ft = {
         python = { 'ruff_organize_imports', 'ruff_format' },
         lua = { 'stylua' },
+        json = { 'fixjson', 'jq' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
