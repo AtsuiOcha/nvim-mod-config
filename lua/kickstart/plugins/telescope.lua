@@ -154,7 +154,7 @@ return {
 
       -- file search includes hidden files
       vim.keymap.set('n', '<leader>sf', function()
-        builtin.find_files { hidden = true }
+        builtin.find_files { hidden = true, file_ignore_patterns = { '^%.git/' } }
       end, { desc = '[S]earch [F]iles (incl. hidden)' })
     end,
   },
