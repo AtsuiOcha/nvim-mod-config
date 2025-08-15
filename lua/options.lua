@@ -78,7 +78,7 @@ vim.opt.shiftwidth = 2 -- Indentation level (for << and >>)
 vim.opt.expandtab = true -- Convert tabs to spaces
 vim.opt.smartindent = true -- Smart autoindenting
 
-vim.opt.colorcolumn = '88'
+vim.opt.colorcolumn = '120'
 
 vim.opt.guicursor = {
   'n-v-c:block-blinkwait300-blinkon200-blinkoff150', -- block in normal, visual, command mode
