@@ -76,7 +76,7 @@ vim.o.confirm = true
 vim.opt.tabstop = 2 -- A tab looks like 2 spaces
 vim.opt.shiftwidth = 2 -- Indentation level (for << and >>)
 vim.opt.expandtab = true -- Convert tabs to spaces
-vim.opt.smartindent = true -- Smart autoindenting
+vim.opt.smartindent = true -- Smart auto indenting
 
 vim.opt.colorcolumn = '120'
 
@@ -89,5 +89,9 @@ vim.opt.guicursor = {
   'a:blinkon100', -- blinking for all modes (fallback)
   'sm:block-blinkwait175-blinkon150-blinkoff150', -- for showmatch
 }
+
+-- spell check
+-- vim.opt.spelllang = 'en_us'
+-- vim.opt.spell = true
 
 -- vim: ts=2 sts=2 sw=2 et
