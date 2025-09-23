@@ -76,11 +76,22 @@ vim.keymap.set('n', '<leader>nd', function()
 end)
 
 vim.keymap.set('n', '<leader>fd', function()
-  vim.diagnostic.open_float(nil, {
-    focus = false,
-    scope = 'line',
-    border = 'rounded',
-    source = 'always',
-  })
+  -- If the floating window is already open, focus it; otherwise, open it.
+  if vim.w.float_diag_open then
+    vim.diagnostic.open_float(nil, {
+      focus = true,
+      scope = 'line',
+      border = 'rounded',
+      source = 'always',
+    })
+  else
+    vim.diagnostic.open_float(nil, {
+      focus = false,
+      scope = 'line',
+      border = 'rounded',
+      source = 'always',
+    })
+    vim.w.float_diag_open = true
+  end
 end, { desc = 'Show diagnostics in float' })
 -- vim: ts=2 sts=2 sw=2 et

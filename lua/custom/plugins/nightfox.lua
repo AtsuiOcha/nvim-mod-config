@@ -14,8 +14,8 @@ return {
             simulate_only = false,
             severity = {
               protan = 0.3,
-              deutan = 1.0,
-              tritan = 0.1,
+              deutan = 0.9,
+              tritan = 0,
             },
           },
         },
