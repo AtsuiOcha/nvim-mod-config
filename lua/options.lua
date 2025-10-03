@@ -74,7 +74,7 @@ vim.o.confirm = true
 -- Use 2-space indentation and convert tabs to spaces for consistent formatting
 -- with smart auto-indentation on new lines
 vim.opt.tabstop = 2 -- A tab looks like 2 spaces
-vim.opt.shiftwidth = 2 -- Indentation level (for << and >>)
+vim.opt.shiftwidth = 4 -- Indentation level (for << and >>)
 vim.opt.expandtab = true -- Convert tabs to spaces
 -- disable smartindent when tresitter is enabled
 vim.opt.smartindent = true -- Smart autoindenting
