@@ -1,7 +1,6 @@
 -- File: lua/custom/plugins/parrot.lua
 return {
   'frankroeder/parrot.nvim',
-  main = 'parrot',
   dependencies = {
     'ibhagwan/fzf-lua',
     'nvim-lua/plenary.nvim',
@@ -9,11 +8,14 @@ return {
   lazy = false,
 
   config = function()
-    require('parrot').setup {
+    local parrot = require 'parrot'
+
+    parrot.setup {
       providers = {
         anthropic = {
           name = 'anthropic',
 
+          -- Build correct GOV endpoint
           endpoint = (function()
             local base = os.getenv 'ANTHROPIC_BASE_URL'
             if base and not base:match '/v1/messages$' then
@@ -27,18 +29,29 @@ return {
             if base then
               return base
             end
+
             local base2 = os.getenv 'ANTHROPIC_BASE_URL'
             if base2 then
               return base2:gsub('/$', '') .. '/v1/models'
             end
+
             return 'https://api.anthropic.com/v1/models'
           end)(),
 
           api_key = os.getenv 'ANTHROPIC_API_KEY' or os.getenv 'ANTHROPIC_AUTH_TOKEN',
 
+          -------------------------------------------------------------------
+          -- Explicit model selection (Anthropic Gov REQUIRED)
+          -------------------------------------------------------------------
           params = {
-            chat = { max_tokens = 4096 },
-            command = { max_tokens = 4096 },
+            chat = {
+              max_tokens = 4096,
+              model = os.getenv 'ANTHROPIC_MODEL' or 'us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0',
+            },
+            command = {
+              max_tokens = 4096,
+              model = os.getenv 'ANTHROPIC_MODEL' or 'us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0',
+            },
           },
 
           topic = false,
@@ -55,17 +68,38 @@ return {
             os.getenv 'ANTHROPIC_MODEL' or 'us-gov.anthropic.claude-sonnet-4-5-20250929-v1:0',
           },
 
+          -------------------------------------------------------------------
+          -- Anthropic Gov FIXES:
+          -- 1. Move system messages to top-level
+          -- 2. Strip empty messages (Gov rejects them)
+          -------------------------------------------------------------------
           preprocess_payload = function(payload)
-            for _, msg in ipairs(payload.messages) do
-              if type(msg.content) == 'string' then
-                msg.content = msg.content:gsub('^%s*(.-)%s*$', '%1')
+            -- Trim whitespace
+            for _, message in ipairs(payload.messages) do
+              if type(message.content) == 'string' then
+                message.content = message.content:gsub('^%s*(.-)%s*$', '%1')
               end
             end
 
-            if payload.messages[1] and payload.messages[1].role == 'system' then
-              payload.system = payload.messages[1].content
-              table.remove(payload.messages, 1)
+            -- Move system messages out of messages[]
+            local msgs = {}
+            for _, msg in ipairs(payload.messages) do
+              if msg.role == 'system' then
+                payload.system = msg.content
+              else
+                table.insert(msgs, msg)
+              end
             end
+            payload.messages = msgs
+
+            -- Remove ANY empty messages (Anthropic GOV requirement)
+            local cleaned = {}
+            for _, msg in ipairs(payload.messages) do
+              if msg.content and msg.content ~= '' and msg.content ~= {} then
+                table.insert(cleaned, msg)
+              end
+            end
+            payload.messages = cleaned
 
             return payload
           end,
@@ -77,16 +111,65 @@ return {
       enable_spinner = true,
     }
 
-    -- keymaps
+    -----------------------------------------------------------------------
+    -- Disable markdown linting in Parrot popup window
+    -----------------------------------------------------------------------
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'markdown',
+      callback = function(ev)
+        local buf = ev.buf
+        local name = vim.api.nvim_buf_get_name(buf)
+
+        -- Parrot chat buffers always have "parrot" somewhere in the name
+        if name:match 'parrot' then
+          -- Disable nvim-lint, ALE, Vale, and LSP diagnostics
+          vim.b[buf].lint_disabled = true
+          vim.b[buf].ale_enabled = 0
+          vim.b[buf].vale_disable = true
+          vim.diagnostic.disable(buf)
+
+          -- Clear any warnings already displayed
+          pcall(vim.diagnostic.reset, nil, buf)
+        end
+      end,
+    })
+
+    -----------------------------------------------------------------------
+    -- KEYMAPS (same as your coworker)
+    -----------------------------------------------------------------------
     local map = vim.keymap.set
 
+    -- Toggle chat with "…" (Option+; on macOS)
     map({ 'n', 'i', 'v' }, '…', function()
       vim.cmd 'PrtChatToggle popup'
     end, { noremap = true, silent = true, desc = 'AI Chat Toggle' })
 
-    map('v', '<leader>ar', ':PrtRewrite<CR>', { desc = 'AI Rewrite' })
-    map('v', '<leader>aa', ':PrtAppend<CR>', { desc = 'AI Append' })
-    map('v', '<leader>ap', ':PrtPrepend<CR>', { desc = 'AI Prepend' })
-    map({ 'n', 'v' }, '<leader>as', '<cmd>PrtStop<CR>', { desc = 'AI Stop' })
+    -- Visual selection → rewrite
+    map('v', '<leader>ar', ':PrtRewrite<CR>', {
+      noremap = true,
+      silent = true,
+      desc = 'AI Rewrite selection',
+    })
+
+    -- Visual selection → append
+    map('v', '<leader>aa', ':PrtAppend<CR>', {
+      noremap = true,
+      silent = true,
+      desc = 'AI Append after selection',
+    })
+
+    -- Visual selection → prepend
+    map('v', '<leader>ap', ':PrtPrepend<CR>', {
+      noremap = true,
+      silent = true,
+      desc = 'AI Prepend before selection',
+    })
+
+    -- Stop generation
+    map({ 'n', 'v' }, '<leader>as', '<cmd>PrtStop<CR>', {
+      noremap = true,
+      silent = true,
+      desc = 'AI Stop generation',
+    })
   end,
 }
