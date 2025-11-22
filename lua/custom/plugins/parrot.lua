@@ -171,5 +171,12 @@ return {
       silent = true,
       desc = 'AI Stop generation',
     })
+
+    -- Visual selection → send into chat input (PrtChatPaste)
+    map('v', '<leader>ai', ':PrtChatPaste<CR>', {
+      noremap = true,
+      silent = true,
+      desc = 'AI Chat Paste (send selection to chat)',
+    })
   end,
 }

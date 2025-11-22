@@ -216,6 +216,10 @@ return {
         -- pyright = {},
         -- rust_analyzer = {},
         terraformls = {},
+        sqlls = {
+          filetypes = { 'sql', 'mysql', 'plsql' },
+          settings = {},
+        },
         basedpyright = {
           filetypes = { 'python' },
           cmd = { 'basedpyright-langserver', '--stdio' },
@@ -279,6 +283,8 @@ return {
         'terraformls',
         'fixjson',
         'typescript-language-server',
+        'sql-formatter',
+        'sqlls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
