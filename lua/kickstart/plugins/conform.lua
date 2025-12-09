@@ -33,7 +33,7 @@ return {
         python = { 'ruff_organize_imports', 'ruff_format' },
         lua = { 'stylua' },
         json = { 'fixjson', 'jq' },
-        sql = { 'sql-formatter' },
+        sql = { 'sqlfmt' },
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
@@ -58,6 +58,12 @@ return {
           command = 'ruff',
           args = { 'format', '-' },
           stdin = true,
+        },
+        sqlfmt = {
+          command = 'sqlfmt',
+          args = { '-' },
+          stdin = true,
+          timeout = 5000, -- or higher if needed
         },
       },
     },

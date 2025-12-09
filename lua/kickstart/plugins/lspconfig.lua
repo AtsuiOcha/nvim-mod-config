@@ -262,7 +262,34 @@ return {
           },
         },
       }
+      -- pytest-language-server (installed via pipx)
+      -- Register + setup manually so it works even if nvim-lspconfig doesn't ship it.
+      local lspconfig = require 'lspconfig'
+      local configs = require 'lspconfig.configs'
+      local util = require 'lspconfig.util'
 
+      if not configs.pytest_lsp then
+        configs.pytest_lsp = {
+          default_config = {
+            -- Point directly at pipx’s binary dir to avoid PATH issues
+            cmd = { vim.fn.expand '~/.local/bin/pytest-language-server' },
+            filetypes = { 'python' },
+            root_dir = function(fname)
+              -- Attach in normal pytest/python projects, but also fall back gracefully
+              return util.root_pattern('pytest.ini', 'pyproject.toml', 'setup.cfg', 'tox.ini')(fname)
+                or util.find_git_ancestor(fname)
+                or util.path.dirname(fname)
+            end,
+            settings = {},
+          },
+        }
+      end
+
+      lspconfig.pytest_lsp.setup {
+        capabilities = vim.tbl_deep_extend('force', {}, capabilities, {
+          offsetEncoding = { 'utf-8' },
+        }),
+      }
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
