@@ -220,6 +220,14 @@ return {
           filetypes = { 'sql', 'mysql', 'plsql' },
           settings = {},
         },
+        ty = {
+          filetypes = { 'python' },
+          settings = {
+            ty = {
+              -- ty language server settings go here
+            },
+          },
+        },
         basedpyright = {
           filetypes = { 'python' },
           cmd = { 'basedpyright-langserver', '--stdio' },
@@ -227,12 +235,11 @@ return {
             offsetEncoding = { 'utf-8' },
           }),
           settings = {
-            python = {
+            basedpyright = {
               analysis = {
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
-                diagnosticMode = 'workspace', -- "workspace" | "openFilesOnly"
-                -- enableTypeIgnoreComments = true, -- This is support for older type comments.
+                diagnosticMode = 'openFilesOnly', -- Less aggressive to avoid conflicts with ty
               },
             },
           },
@@ -312,6 +319,7 @@ return {
         'typescript-language-server',
         'sql-formatter',
         'sqlls',
+        'ty',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
