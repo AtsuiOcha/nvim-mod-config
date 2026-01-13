@@ -228,22 +228,22 @@ return {
             },
           },
         },
-        basedpyright = {
-          filetypes = { 'python' },
-          cmd = { 'basedpyright-langserver', '--stdio' },
-          capabilities = vim.tbl_deep_extend('force', capabilities, {
-            offsetEncoding = { 'utf-8' },
-          }),
-          settings = {
-            basedpyright = {
-              analysis = {
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = 'openFilesOnly', -- Less aggressive to avoid conflicts with ty
-              },
-            },
-          },
-        },
+        -- basedpyright = {
+        --   filetypes = { 'python' },
+        --   cmd = { 'basedpyright-langserver', '--stdio' },
+        --   capabilities = vim.tbl_deep_extend('force', capabilities, {
+        --     offsetEncoding = { 'utf-8' },
+        --   }),
+        --   settings = {
+        --     basedpyright = {
+        --       analysis = {
+        --         autoSearchPaths = true,
+        --         useLibraryCodeForTypes = true,
+        --         diagnosticMode = 'openFilesOnly', -- Less aggressive to avoid conflicts with ty
+        --       },
+        --     },
+        --   },
+        -- },
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -313,7 +313,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'basedpyright',
+        -- 'basedpyright',
         'terraformls',
         'fixjson',
         'typescript-language-server',
