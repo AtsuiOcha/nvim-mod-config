@@ -37,8 +37,10 @@ return {
         -- Conform can also run multiple formatters sequentially
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'prettierd', 'prettier', stop_after_first = true },
-        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascript = { 'prettierd', 'prettier', 'eslint_d', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', 'eslint_d', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', 'eslint_d', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', 'eslint_d', stop_after_first = true },
       },
       formatters = {
         ruff_organize_imports = {
@@ -64,6 +66,12 @@ return {
           args = { '-' },
           stdin = true,
           timeout = 5000, -- or higher if needed
+        },
+        -- Configure eslint_d
+        eslint_d = {
+          command = 'eslint_d',
+          args = { '--fix-to-stdout', '--stdin', '--stdin-filename', '$FILENAME' },
+          stdin = true,
         },
       },
     },
