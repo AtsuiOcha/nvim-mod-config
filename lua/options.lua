@@ -74,10 +74,21 @@ vim.o.confirm = true
 -- Use 2-space indentation and convert tabs to spaces for consistent formatting
 -- with smart auto-indentation on new lines
 vim.opt.tabstop = 2 -- A tab looks like 2 spaces
-vim.opt.shiftwidth = 4 -- Indentation level (for << and >>)
+vim.opt.shiftwidth = 2 -- Indentation level (for << and >>)
 vim.opt.expandtab = true -- Convert tabs to spaces
--- disable smartindent when tresitter is enabled
+-- disable smartindent when treesitter is enabled
 vim.opt.smartindent = true -- Smart autoindenting
+
+-- Python uses 4-space indentation per PEP 8
+vim.api.nvim_create_autocmd('FileType', {
+  desc = 'Set 4-space indentation for Python',
+  group = vim.api.nvim_create_augroup('python-indent', { clear = true }),
+  pattern = 'python',
+  callback = function()
+    vim.opt_local.tabstop = 4
+    vim.opt_local.shiftwidth = 4
+  end,
+})
 
 vim.opt.colorcolumn = '120'
 

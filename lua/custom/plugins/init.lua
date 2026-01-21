@@ -3,6 +3,7 @@
 --
 -- See the kickstart.nvim README for more information
 return {
-  { 'tpope/vim-surround' },
+  -- NOTE: vim-surround removed in favor of mini.surround (lua/kickstart/plugins/mini.lua)
   { 'numToStr/Comment.nvim', opts = {} },
 }
+-- vim: ts=2 sts=2 sw=2 et

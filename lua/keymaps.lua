@@ -3,7 +3,7 @@
 
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'Exit insert mode with jj' })
 -- remove this cursed mapping
-vim.keymap.set('n', '<C-x', '<cmd>echo "DON\'T YOU DARE!!!"<CR>')
+vim.keymap.set('n', '<C-x>', '<cmd>echo "DON\'T YOU DARE!!!"<CR>', { desc = 'Prevent accidental close' })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
@@ -36,12 +36,9 @@ vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
 
 -- Keybinds to make split navigation easier.
 --  Use CTRL+<hjkl> to switch between windows
+--  NOTE: These are handled by vim-tmux-navigator plugin
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -73,25 +70,14 @@ end, { desc = 'Toggle comment for selection' })
 -- dismiss notifications
 vim.keymap.set('n', '<leader>nd', function()
   require('noice').cmd 'dismiss'
-end)
+end, { desc = 'Dismiss notifications' })
 
 vim.keymap.set('n', '<leader>fd', function()
-  -- If the floating window is already open, focus it; otherwise, open it.
-  if vim.w.float_diag_open then
-    vim.diagnostic.open_float(nil, {
-      focus = true,
-      scope = 'line',
-      border = 'rounded',
-      source = 'always',
-    })
-  else
-    vim.diagnostic.open_float(nil, {
-      focus = false,
-      scope = 'line',
-      border = 'rounded',
-      source = 'always',
-    })
-    vim.w.float_diag_open = true
-  end
+  vim.diagnostic.open_float(nil, {
+    focus = true,
+    scope = 'line',
+    border = 'rounded',
+    source = true,
+  })
 end, { desc = 'Show diagnostics in float' })
 -- vim: ts=2 sts=2 sw=2 et

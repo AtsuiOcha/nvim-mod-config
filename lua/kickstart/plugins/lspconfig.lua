@@ -72,8 +72,8 @@ return {
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          -- signature help
-          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { buffer = event.buf, desc = 'LSP: Signature Help' })
+          -- signature help (use <leader>lk to avoid conflict with window navigation)
+          map('<leader>lk', vim.lsp.buf.signature_help, 'Signature Help')
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.

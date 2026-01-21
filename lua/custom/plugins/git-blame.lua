@@ -15,3 +15,4 @@ return {
   --     virtual_text_column = 1, -- virtual text start column, check Start virtual text at column section for more options
   --   },
 }
+-- vim: ts=2 sts=2 sw=2 et

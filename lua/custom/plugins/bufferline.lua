@@ -26,3 +26,4 @@ return {
     vim.keymap.set('n', '<S-Tab>', '<cmd>BufferLineCyclePrev<CR>', { desc = 'Previous buffer' })
   end,
 }
+-- vim: ts=2 sts=2 sw=2 et

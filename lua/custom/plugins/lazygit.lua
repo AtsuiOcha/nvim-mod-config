@@ -18,3 +18,4 @@ return {
     { '<leader>gg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
   },
 }
+-- vim: ts=2 sts=2 sw=2 et
