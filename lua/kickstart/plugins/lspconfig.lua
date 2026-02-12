@@ -220,23 +220,23 @@ return {
           filetypes = { 'sql', 'mysql', 'plsql' },
           settings = {},
         },
-        basedpyright = {
-          filetypes = { 'python' },
-          cmd = { 'basedpyright-langserver', '--stdio' },
-          capabilities = vim.tbl_deep_extend('force', capabilities, {
-            offsetEncoding = { 'utf-8' },
-          }),
-          settings = {
-            python = {
-              analysis = {
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = 'workspace', -- "workspace" | "openFilesOnly"
-                -- enableTypeIgnoreComments = true, -- This is support for older type comments.
-              },
-            },
-          },
-        },
+        -- basedpyright = {
+        --   filetypes = { 'python' },
+        --   cmd = { 'basedpyright-langserver', '--stdio' },
+        --   capabilities = vim.tbl_deep_extend('force', capabilities, {
+        --     offsetEncoding = { 'utf-8' },
+        --   }),
+        --   settings = {
+        --     python = {
+        --       analysis = {
+        --         autoSearchPaths = true,
+        --         useLibraryCodeForTypes = true,
+        --         diagnosticMode = 'workspace', -- "workspace" | "openFilesOnly"
+        --         -- enableTypeIgnoreComments = true, -- This is support for older type comments.
+        --       },
+        --     },
+        --   },
+        -- },
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -290,6 +290,24 @@ return {
           offsetEncoding = { 'utf-8' },
         }),
       }
+
+      -- ty type checker (Python) - https://github.com/astral-sh/ty
+      if not configs.ty then
+        configs.ty = {
+          default_config = {
+            cmd = { vim.fn.expand '~/.local/bin/ty', 'server' },
+            filetypes = { 'python' },
+            root_dir = util.root_pattern('pyproject.toml', 'ty.toml', 'setup.py', 'setup.cfg', '.git'),
+          },
+        }
+      end
+
+      lspconfig.ty.setup {
+        capabilities = vim.tbl_deep_extend('force', {}, capabilities, {
+          offsetEncoding = { 'utf-8' },
+        }),
+      }
+
       -- Ensure the servers and tools above are installed
       --
       -- To check the current status of installed tools and/or manually install
@@ -306,7 +324,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'basedpyright',
+        -- 'basedpyright',
         'terraformls',
         'fixjson',
         'typescript-language-server',
