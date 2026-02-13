@@ -1,7 +1,7 @@
 return {
   { 'ellisonleao/glow.nvim', config = true, cmd = 'Glow' },
   {
-    'MeanderingProgrammer/markdown.nvim',
+    'MeanderingProgrammer/render-markdown.nvim',
     ft = { 'markdown' }, -- Load based on file type
     name = 'render-markdown',
     dependencies = { 'nvim-treesitter/nvim-treesitter' },

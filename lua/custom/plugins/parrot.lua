@@ -115,6 +115,7 @@ return {
     -- Disable markdown linting in Parrot popup window
     -----------------------------------------------------------------------
     vim.api.nvim_create_autocmd('FileType', {
+      group = vim.api.nvim_create_augroup('parrot-markdown-lint', { clear = true }),
       pattern = 'markdown',
       callback = function(ev)
         local buf = ev.buf
@@ -126,7 +127,7 @@ return {
           vim.b[buf].lint_disabled = true
           vim.b[buf].ale_enabled = 0
           vim.b[buf].vale_disable = true
-          vim.diagnostic.disable(buf)
+          vim.diagnostic.enable(false, { bufnr = buf })
 
           -- Clear any warnings already displayed
           pcall(vim.diagnostic.reset, nil, buf)
@@ -178,6 +179,11 @@ return {
       silent = true,
       desc = 'AI Chat Paste (send selection to chat)',
     })
+
+    -- New chat (reset context)
+    map({ 'n', 'i', 'v' }, '<leader>an', function()
+      vim.cmd 'PrtChatNew popup'
+    end, { noremap = true, silent = true, desc = 'AI New chat (reset context)' })
   end,
 }
 -- vim: ts=2 sts=2 sw=2 et

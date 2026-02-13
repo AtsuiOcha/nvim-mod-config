@@ -3,7 +3,20 @@ return {
     'folke/noice.nvim',
     event = 'VeryLazy',
     opts = {
-      -- add any options here
+      lsp = {
+        -- Disable LSP progress (use fidget.nvim instead)
+        progress = { enabled = false },
+        -- Override markdown rendering for better compatibility
+        override = {
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+        },
+      },
+      presets = {
+        bottom_search = true, -- Use a classic bottom cmdline for search
+        command_palette = false, -- Cmdline appears in center of screen
+        long_message_to_split = true, -- Long messages will be sent to a split
+      },
     },
     dependencies = {
       -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries

@@ -28,7 +28,7 @@ return {
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = 'eol', -- 'eol' | 'overlay' | 'right_align'
-        delay = 0, -- 0 ms delay = no delay
+        delay = 100, -- Small delay for better performance
         ignore_whitespace = false,
       },
       current_line_blame_formatter = '<author>, <author_time:%R> - <summary>',
@@ -79,8 +79,8 @@ return {
           gitsigns.diffthis '@'
         end, { desc = 'git [D]iff against last commit' })
         -- Toggles
-        -- map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
-        map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle git show [D]eleted' })
+        map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = '[T]oggle git show [b]lame line' })
+        map('n', '<leader>tD', gitsigns.preview_hunk_inline, { desc = '[T]oggle preview hunk inline' })
       end,
     },
   },
