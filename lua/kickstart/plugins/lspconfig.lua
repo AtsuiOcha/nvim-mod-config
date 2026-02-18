@@ -207,6 +207,11 @@ return {
         -- pyright = {},
         -- rust_analyzer = {},
         terraformls = {},
+        ty = {
+          capabilities = {
+            offsetEncoding = { 'utf-8' },
+          },
+        },
         sqlls = {
           filetypes = { 'sql', 'mysql', 'plsql' },
           settings = {},
@@ -266,10 +271,13 @@ return {
             cmd = { vim.fn.expand '~/.local/bin/pytest-language-server' },
             filetypes = { 'python' },
             root_dir = function(fname)
-              -- Attach in normal pytest/python projects, but also fall back gracefully
+              -- Only attach to test files (test_*.py, *_test.py, or files in test(s)/ directory)
+              local basename = vim.fn.fnamemodify(fname, ':t')
+              if not (basename:match '^test_' or basename:match '_test%.py$' or fname:match '/tests?/') then
+                return nil
+              end
               return util.root_pattern('pytest.ini', 'pyproject.toml', 'setup.cfg', 'tox.ini')(fname)
                 or util.find_git_ancestor(fname)
-                or util.path.dirname(fname)
             end,
             settings = {},
           },
@@ -277,23 +285,6 @@ return {
       end
 
       lspconfig.pytest_lsp.setup {
-        capabilities = vim.tbl_deep_extend('force', {}, capabilities, {
-          offsetEncoding = { 'utf-8' },
-        }),
-      }
-
-      -- ty type checker (Python) - https://github.com/astral-sh/ty
-      if not configs.ty then
-        configs.ty = {
-          default_config = {
-            cmd = { vim.fn.expand '~/.local/bin/ty', 'server' },
-            filetypes = { 'python' },
-            root_dir = util.root_pattern('pyproject.toml', 'ty.toml', 'setup.py', 'setup.cfg', '.git'),
-          },
-        }
-      end
-
-      lspconfig.ty.setup {
         capabilities = vim.tbl_deep_extend('force', {}, capabilities, {
           offsetEncoding = { 'utf-8' },
         }),

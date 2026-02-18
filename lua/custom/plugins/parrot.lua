@@ -181,7 +181,7 @@ return {
     })
 
     -- New chat (reset context)
-    map({ 'n', 'i', 'v' }, '<leader>an', function()
+    map({ 'n', 'v' }, '<leader>an', function()
       vim.cmd 'PrtChatNew popup'
     end, { noremap = true, silent = true, desc = 'AI New chat (reset context)' })
   end,

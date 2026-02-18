@@ -13,7 +13,7 @@ return {
         },
       },
       presets = {
-        bottom_search = true, -- Use a classic bottom cmdline for search
+        bottom_search = false, -- Use centered popup for search
         command_palette = false, -- Cmdline appears in center of screen
         long_message_to_split = true, -- Long messages will be sent to a split
       },
