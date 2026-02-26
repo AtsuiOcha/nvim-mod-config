@@ -207,23 +207,19 @@ return {
         -- pyright = {},
         -- rust_analyzer = {},
         terraformls = {},
-        ty = {
-          settings = {
-            ty = {
-              -- Disable language services (completion, hover, go-to-definition, etc.)
-              -- Let basedpyright handle these; ty focuses on type checking/diagnostics
-              disableLanguageServices = true,
-            },
-          },
-        },
+        -- ty: Commented out - conflicts with basedpyright for go-to-definition.
+        -- Uncomment when ty is more mature and can coexist with basedpyright.
+        -- ty = {
+        --   settings = {
+        --     ty = {
+        --       disableLanguageServices = true,
+        --     },
+        --   },
+        -- },
         basedpyright = {
           settings = {
             basedpyright = {
               disableOrganizeImports = true, -- Other tools can handle this
-              analysis = {
-                -- Disable diagnostics - ty handles all type checking
-                diagnosticMode = 'off',
-              },
             },
           },
         },
