@@ -208,31 +208,29 @@ return {
         -- rust_analyzer = {},
         terraformls = {},
         ty = {
-          capabilities = {
-            offsetEncoding = { 'utf-8' },
+          settings = {
+            ty = {
+              -- Disable language services (completion, hover, go-to-definition, etc.)
+              -- Let basedpyright handle these; ty focuses on type checking/diagnostics
+              disableLanguageServices = true,
+            },
+          },
+        },
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              disableOrganizeImports = true, -- Other tools can handle this
+              analysis = {
+                -- Disable diagnostics - ty handles all type checking
+                diagnosticMode = 'off',
+              },
+            },
           },
         },
         sqlls = {
           filetypes = { 'sql', 'mysql', 'plsql' },
           settings = {},
         },
-        -- basedpyright = {
-        --   filetypes = { 'python' },
-        --   cmd = { 'basedpyright-langserver', '--stdio' },
-        --   capabilities = vim.tbl_deep_extend('force', capabilities, {
-        --     offsetEncoding = { 'utf-8' },
-        --   }),
-        --   settings = {
-        --     python = {
-        --       analysis = {
-        --         autoSearchPaths = true,
-        --         useLibraryCodeForTypes = true,
-        --         diagnosticMode = 'workspace', -- "workspace" | "openFilesOnly"
-        --         -- enableTypeIgnoreComments = true, -- This is support for older type comments.
-        --       },
-        --     },
-        --   },
-        -- },
 
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -259,36 +257,27 @@ return {
         },
       }
       -- pytest-language-server (installed via pipx)
-      -- Register + setup manually so it works even if nvim-lspconfig doesn't ship it.
-      local lspconfig = require 'lspconfig'
-      local configs = require 'lspconfig.configs'
-      local util = require 'lspconfig.util'
-
-      if not configs.pytest_lsp then
-        configs.pytest_lsp = {
-          default_config = {
-            -- Point directly at pipx’s binary dir to avoid PATH issues
-            cmd = { vim.fn.expand '~/.local/bin/pytest-language-server' },
-            filetypes = { 'python' },
-            root_dir = function(fname)
-              -- Only attach to test files (test_*.py, *_test.py, or files in test(s)/ directory)
-              local basename = vim.fn.fnamemodify(fname, ':t')
-              if not (basename:match '^test_' or basename:match '_test%.py$' or fname:match '/tests?/') then
-                return nil
-              end
-              return util.root_pattern('pytest.ini', 'pyproject.toml', 'setup.cfg', 'tox.ini')(fname)
-                or util.find_git_ancestor(fname)
-            end,
-            settings = {},
-          },
-        }
-      end
-
-      lspconfig.pytest_lsp.setup {
-        capabilities = vim.tbl_deep_extend('force', {}, capabilities, {
-          offsetEncoding = { 'utf-8' },
-        }),
-      }
+      -- Register using the new Neovim 0.11+ vim.lsp.config() API
+      vim.lsp.config('pytest_lsp', {
+        cmd = { vim.fn.expand '~/.local/bin/pytest-language-server' },
+        filetypes = { 'python' },
+        root_markers = { 'pytest.ini', 'pyproject.toml', 'setup.cfg', 'tox.ini', '.git' },
+        -- Only attach to test files
+        root_dir = function(bufnr, on_dir)
+          local fname = vim.api.nvim_buf_get_name(bufnr)
+          local basename = vim.fn.fnamemodify(fname, ':t')
+          if not (basename:match '^test_' or basename:match '_test%.py$' or fname:match '/tests?/') then
+            return nil
+          end
+          -- Find project root
+          local markers = { 'pytest.ini', 'pyproject.toml', 'setup.cfg', 'tox.ini', '.git' }
+          local root = vim.fs.root(bufnr, markers)
+          if root then
+            on_dir(root)
+          end
+        end,
+      })
+      vim.lsp.enable 'pytest_lsp'
 
       -- Ensure the servers and tools above are installed
       --
@@ -306,7 +295,7 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        -- 'basedpyright',
+        'basedpyright',
         'terraformls',
         'fixjson',
         'typescript-language-server',
